@@ -1,10 +1,15 @@
 const express = require('express');
+const exphbs = require('express-handlebars');
 const data = require('./models/data');
 const routes = require('./router');
+const mongoose = require('mongoose');
+
 const app = express();
 
+const database = process.env.MONGODB_URI || 'mongodb://localhost:27017/test';
+mongoose.connect(database);
 
-const exphbs = require('express-handlebars');
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use('/static', express.static('public'));
@@ -35,7 +40,7 @@ routes(app);
 
 
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Application is running on port 3000");
 });
 
